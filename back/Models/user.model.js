@@ -5,7 +5,7 @@ const User = mongoose.Schema({
     password: {type: String, required: true}, 
     firstname: {type: String, required: true},
     lastname: {type: String, required: true},
-    photo: {type: String, required: true},
+    photo: {type: String},
     category: {type: String, required: true},
     isAdmin: {type: Boolean, required: true},
 }, {timestamps: true});

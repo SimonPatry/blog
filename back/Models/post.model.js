@@ -13,6 +13,6 @@ const Post = mongoose.Schema({
 
 const modelName = "posts";
 const collectionName = "posts";
-const UserModel = mongoose.model(modelName, Post, collectionName);
+const PostModel = mongoose.model(modelName, Post, collectionName);
 
-export default UserModel;
+export default PostModel;
