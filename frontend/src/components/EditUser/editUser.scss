@@ -1,0 +1,27 @@
+.edituser h1, .edituser label{
+  color: rgb(15, 15, 15);
+}
+
+.edituser__container__wrapper__input>div{
+  margin: 10px;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+  border-color: rgb(17, 17, 17) !important;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+  color: rgb(12, 11, 11) !important;
+}
+
+.edituser__container__wrapper__input{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 40%;
+  margin: 0 auto;
+}
+
+.edituser__container__wrapper__button{
+  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+}
