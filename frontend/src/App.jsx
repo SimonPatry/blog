@@ -11,16 +11,26 @@ import EditUser from './components/EditUser/EditUser';
 import {fetchJson} from "./components/fetch";
 import AppContext from "./context/AppContext";
 import Home from './components/Home/Home';
-import { Avatar, Button } from '@mui/material';
+import { styled, Typography, Avatar, IconButton, Toolbar, Divider, Button } from '@mui/material';
 import Collaborators from './components/Collaborators/Collaborators';
 import { Drawer } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AppBar from '@mui/material/AppBar';
+import { Box } from '@mui/system';
 
+
+const StyledLink = styled('a')({
+  textDecoration: "none",
+  textAlign: "left",
+  color: "white",
+  width: "100%",
+  height: "2em",
+});
 
 const App = () => {
   // On importe les variables d'environnement
   const { REACT_APP_USER } = process.env;
 
-  // Tous les state de App.jsx
   const [sessionToken, setSessionToken] = useState('');
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -70,12 +80,26 @@ const App = () => {
     <AppContext.Provider value={providerData}>
       <div className="App">
         <Router>
-          <Button onClick={() => {
-            handleDrawer();
+          <AppBar sx={{
+            backgroundColor: "#0e1217",
           }}>
-            Open
-          </Button>
-          <header className="App-header">
+            <Toolbar>
+              <IconButton
+                onClick={() => {
+                  handleDrawer();
+                }}
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: "center" }}>
+                DailyDev
+              </Typography>
+            </Toolbar>
+          </AppBar>
             <Drawer
               anchor="left"
               open={open}
@@ -83,41 +107,59 @@ const App = () => {
                 handleDrawer();
               }}
             >
-              <nav>
-                <Link to="/">Home</Link>
-                <Link to="/collaborators">Collaborators</Link>
+              <Box
+                width="240px"
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  backgroundColor: "#0e1217",
+                  paddingLeft: "20px",
+                }}
+              >
+                <Box sx={{height: "50px"}}>
                 {
                   !user ? (
                     <>
-                      <Link to="/login">Log in</Link>
+                      <Button href="/login">Log in</Button>
                     </>
                   )
                   :
                   (
                     <>
                       { sessionToken && user && user.isAdmin &&
-                      <Link to="/sign_in"> + Ajouter </Link>
+                      <StyledLink href="/sign_in"> + Ajouter </StyledLink>
                       }
-                      <Link to={`/edit_user`}>
+                      <StyledLink href={`/edit_user`}>
                         <Avatar
                           alt={`${user.firstname} ${user.lastname}`}
                           src={user.photo}
                         />
-                      </Link>
-                      <Link to="/" onClick={() => {
+                      </StyledLink>
+                      <StyledLink href="/" onClick={() => {
                           localStorage.removeItem("token");
                           req.session.destroy();
                           setUser(emptyUser);
                         }}
                       >
                         Sign Out
-                      </Link>
+                      </StyledLink>
                     </>
                   )
                 }
-              </nav>
+                </Box>
+                
+                <Divider sx={{color:"white"}} />
+                <StyledLink href="/">Home</StyledLink>
+                <StyledLink href="/collaborators">Collaborators</StyledLink>
+              </Box>
+              <Box
+                width="260px"
+                sx={{
+                  height: "100%",
+                  backgroundColor: "#0e1217",
+                }}
+              ></Box>
             </Drawer>
-          </header>
           <div className="globalContainer">
             <Routes>
               <Route exact path="/" element={<Home />}/>
