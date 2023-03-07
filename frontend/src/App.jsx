@@ -11,8 +11,10 @@ import EditUser from './components/EditUser/EditUser';
 import {fetchJson} from "./components/fetch";
 import AppContext from "./context/AppContext";
 import Home from './components/Home/Home';
-import { Avatar } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import Collaborators from './components/Collaborators/Collaborators';
+import { Drawer } from '@mui/material';
+
 
 const App = () => {
   // On importe les variables d'environnement
@@ -20,6 +22,7 @@ const App = () => {
 
   // Tous les state de App.jsx
   const [sessionToken, setSessionToken] = useState('');
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   // Fonction pour récupérer l'utilisateur
@@ -29,6 +32,10 @@ const App = () => {
     } catch(e){
       console.error(e);
     }
+  }
+
+  const handleDrawer = () => {
+    setOpen(open ? false :true)
   }
 
   // Quand le token est présent, on récupère l'utilisateur
@@ -63,40 +70,53 @@ const App = () => {
     <AppContext.Provider value={providerData}>
       <div className="App">
         <Router>
+          <Button onClick={() => {
+            handleDrawer();
+          }}>
+            Open
+          </Button>
           <header className="App-header">
-            <nav>
-              <Link to="/">Home</Link>
-              <Link to="/collaborators">Collaborators</Link>
-              {
-                !user ? (
-                  <>
-                    <Link to="/login">Log in</Link>
-                  </>
-                )
-                :
-                (
-                  <>
-                    { sessionToken && user && user.isAdmin &&
-                     <Link to="/sign_in"> + Ajouter </Link>
-                    }
-                    <Link to={`/edit_user`}>
-                      <Avatar
-                        alt={`${user.firstname} ${user.lastname}`}
-                        src={user.photo}
-                      />
-                    </Link>
-                    <Link to="/" onClick={() => {
-                        localStorage.removeItem("token");
-                        req.session.destroy();
-                        setUser(emptyUser);
-                      }}
-                    >
-                      Sign Out
-                    </Link>
-                  </>
-                )
-              }
-            </nav>
+            <Drawer
+              anchor="left"
+              open={open}
+              onClose={() => {
+                handleDrawer();
+              }}
+            >
+              <nav>
+                <Link to="/">Home</Link>
+                <Link to="/collaborators">Collaborators</Link>
+                {
+                  !user ? (
+                    <>
+                      <Link to="/login">Log in</Link>
+                    </>
+                  )
+                  :
+                  (
+                    <>
+                      { sessionToken && user && user.isAdmin &&
+                      <Link to="/sign_in"> + Ajouter </Link>
+                      }
+                      <Link to={`/edit_user`}>
+                        <Avatar
+                          alt={`${user.firstname} ${user.lastname}`}
+                          src={user.photo}
+                        />
+                      </Link>
+                      <Link to="/" onClick={() => {
+                          localStorage.removeItem("token");
+                          req.session.destroy();
+                          setUser(emptyUser);
+                        }}
+                      >
+                        Sign Out
+                      </Link>
+                    </>
+                  )
+                }
+              </nav>
+            </Drawer>
           </header>
           <div className="globalContainer">
             <Routes>
