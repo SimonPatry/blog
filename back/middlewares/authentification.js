@@ -2,12 +2,29 @@ import dotenv from "dotenv";
 import jsonwebtoken from "jsonwebtoken";
 import UserModel from "../Models/user.model.js"
 import bcrypt from "bcrypt";
+import { getPost } from "../controllers/posts.js";
 
 dotenv.config();
 
 const {APP_SECRET} = process.env;
 
 // Password security hash
+
+export const isUserAuthor = async (req, res,next) => {
+    
+    const {id} = req.params;
+
+    const post = await getPost(id);
+    const user = jsonwebtoken.decode(req.session.token);
+    
+    console.log(user);
+    if(user != post.author.firstname) {
+        return res.status(401).json({
+            Unauthorized: 'You don\'t have the rights for this action'
+        });
+    }
+    next();
+}
 
 export const hashPass = async (req, res, next) => {
     const { password } = req.body;

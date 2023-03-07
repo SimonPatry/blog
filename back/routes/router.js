@@ -1,24 +1,32 @@
 import express from "express";
-import { hashPass, authVerif, isAdmin } from "../middlewares/authentification.js"
+import { hashPass, authVerif, isAdmin, isUserAuthor } from "../middlewares/authentification.js"
 import { Login } from "../controllers/login.js";
 import { SignIn } from "../controllers/signin.js";
 import {
     getUser,
-    getRandomUser,
     getSessionUser,
     getUsers,
     updateUser,
     deleteUser,
 } from "../controllers/user.js";
+import {
+    getPost,
+    getPosts,
+    deletePost,
+    updatePost
+} from "../controllers/posts.js";
 
 const router = express.Router();
 
 // GET
+
 router.get("/users/:id", getUser);
 router.get("/users", getUsers);
 router.get("/user", authVerif, getSessionUser);
-router.get("/random", getRandomUser);
+router.get("/user", authVerif, getSessionUser);
 
+router.get("/post", authVerif, isUserAuthor, getPost);
+router.get("/posts", authVerif, getPosts);
 
 // POSTS
 router.post("/login", Login);
