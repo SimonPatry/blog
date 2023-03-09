@@ -28,11 +28,11 @@
 }
 
 .action-button {
-    margin: 10px;
+    margin: 15px 0px;
     padding: 0;
     height: 0;
     width: 0;
-    color: #a8b3cf
+    color: #a8b3cf;
 }
 
 .previous,

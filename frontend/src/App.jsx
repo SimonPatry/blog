@@ -159,7 +159,23 @@ const App = () => {
                     firstname: "john",
                     lastname: "doe",
                     photo: "",
-                  }
+                  },
+                  comments: [{
+                    content: "this is a comment",
+                    author: {
+                      firstname: "john",
+                      lastname: "doe",
+                      photo: "",
+                    },
+                    responses: [{
+                      content: "this is a response to a comment",
+                    author: {
+                      firstname: "john",
+                      lastname: "doe",
+                      photo: "",
+                    },
+                    }]
+                  }]
                 }]} postIndex={0}/>
               </Box>
               <Box
