@@ -7,16 +7,6 @@ export const getUsers = async (req, res) => {
     res.json(users);
 };
 
-export const getRandomUser = async (req, res) => {
-    //get all users
-    const users = await UserModel.find({});
-
-    //get one random id from users
-    const randomId = Math.floor(Math.random() * (users.length + 1));
-    
-    res.json(users[randomId]);
-};
-
 export const getSessionUser = async (req, res) => {
     const user = await UserModel.findOne({ email: req.session.email })
     res.json(user);
