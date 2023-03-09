@@ -1,31 +1,5 @@
-h1 {
-    text-align: center;
-}
-
-h3{
-    text-align: center;
-}
-
-p{
-    text-align: center;
-}
-
-.css-1ri6ub7-MuiPaper-root-MuiCard-root {
-    margin: 0 auto;
-    text-align: center;
-}
-
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+.bottom-button{
     background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-}
-
-nav{
-    background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-    height: 50px;
     display: flex;
-    align-items: center;
-}
-
-a{
-    margin: 0 auto
+    margin: 0 auto;
 }
