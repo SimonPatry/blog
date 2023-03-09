@@ -17,6 +17,7 @@ import { Drawer } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/system';
+import PostModal from './components/PostModal/PostModal';
 
 
 const StyledLink = styled('a')({
@@ -147,10 +148,19 @@ const App = () => {
                   )
                 }
                 </Box>
-                
                 <Divider sx={{color:"white"}} />
                 <StyledLink href="/">Home</StyledLink>
                 <StyledLink href="/collaborators">Collaborators</StyledLink>
+                <PostModal posts={[{
+                  title: "test",
+                  content: "content test",
+                  tags: ["test1","test2","test3"],
+                  author: {
+                    firstname: "john",
+                    lastname: "doe",
+                    photo: "",
+                  }
+                }]} postIndex={0}/>
               </Box>
               <Box
                 width="260px"
