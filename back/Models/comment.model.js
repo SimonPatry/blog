@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const Comment = mongoose.Schema({
+    post : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref: 'post',
+        
+     },
     content: {type: String, required: true},
     date: {type: Date},
     author : {
