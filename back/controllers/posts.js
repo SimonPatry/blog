@@ -1,5 +1,7 @@
 import Mongoose from "mongoose";
+import CommentModel from "../Models/comment.model.js";
 import PostModel from '../Models/post.model.js';
+import UserModel from "../Models/user.model.js";
 
 export const getPosts = async (req, res) => {
     const posts = await PostModel.find();
@@ -8,15 +10,25 @@ export const getPosts = async (req, res) => {
 };
 
 export const getPost = async (req, res) => {
+    const {FRONTEND_URL} = process.env
     const { id } = req.params;
-    const post = await PostModel.aggregate([{$match: {_id: Mongoose.Types.ObjectId(id)}},{
-        $lookup:
-          {
-            from: "comment",
-            localField: "_id",
-            foreignField: "comments",
-            as: "comments"
-        }}]);
+    let comments = await CommentModel.find({"post_id": Mongoose.Types.ObjectId(id)});
+    comments.map(async (comment) => {
+        UserModel.find({"_id": comment.author})
+        .then((response) => {
+            comment = {
+                ...comment,
+                author: response[0]
+            }
+        })
+    })
+    let post = await PostModel.find({"_id": Mongoose.Types.ObjectId(id)}) ;
+    post = {
+        ...post,
+        comments: comments
+    }
+
+    /* db.employee.aggregate([{$lookup:{from:'address',localField:'address',foreignField:"_id",as:'addr'}}])*/
     // post.populate("comments");
     console.log(post);
     res.json(post);

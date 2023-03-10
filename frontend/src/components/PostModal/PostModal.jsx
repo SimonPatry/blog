@@ -17,7 +17,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import CardMedia from '@mui/material/CardMedia';
 import LinkIcon from '@mui/icons-material/Link';
 import SendIcon from '@mui/icons-material/Send';
-import { fetchPatch } from '../fetch';
+import { fetchJson, fetchPatch } from '../fetch';
 import AppContext from '../../context/AppContext';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -74,9 +74,9 @@ const PostModal = ({ id, posts, postIndex }) => {
 
   useEffect(() => {
     setPost(posts[postIndex])
-    fetch(`http://localhost:8000/posts/${id}`)
+    fetchJson(`http://localhost:8000/posts/${id}`)
     .then(res => {
-      console.log(res);
+      setPost(res);
     })
   }, [])
 
