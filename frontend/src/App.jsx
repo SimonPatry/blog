@@ -12,7 +12,7 @@ import {fetchJson} from "./components/fetch";
 import AppContext from "./context/AppContext";
 import Home from './components/Home/Home';
 import { styled, Typography, Avatar, IconButton, Toolbar, Divider, Button } from '@mui/material';
-import posts from './components/Posts/posts';
+import Posts from './components/Posts/Posts';
 import { Drawer } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -189,7 +189,7 @@ const App = () => {
           <div className="globalContainer">
             <Routes>
               <Route exact path="/" element={<Home />}/>
-              <Route exact path="/posts" element={<posts />}/>
+              <Route exact path="/posts" element={<Posts />}/>
               <Route exact path="/login" element={<Login />}/>
               <Route exact path="/sign_in" element={<SignIn />}/>
               <Route exact path='/edit_user' element={<EditUser/>}/>
