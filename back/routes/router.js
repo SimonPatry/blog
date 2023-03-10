@@ -27,8 +27,8 @@ router.get("/users/:id", getUser);
 router.get("/users", getUsers);
 router.get("/user", authVerif, getSessionUser);
 
-router.get("/posts/:id", authVerif, getPost);
-router.get("/posts", authVerif, getPosts);
+router.get("/posts/:id", getPost);
+router.get("/posts", getPosts);
 
 // POSTS
 router.post("/login", Login);

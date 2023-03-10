@@ -5,7 +5,7 @@ const Post = mongoose.Schema({
     content: {type: String, required: true},
     url: {type: String},
     date: {type: Date},
-    tag: [{type: String}],
+    tags: [{type: String}],
     author : {
         type : mongoose.Schema.Types.ObjectId,
         ref: 'user',

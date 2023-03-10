@@ -155,32 +155,7 @@ const App = () => {
                 }}>
                   <StyledLink href="/">Home</StyledLink>
                 </Box>
-                <PostModal posts={[{
-                  title: "test",
-                  content: "content test",
-                  tags: ["test1","test2","test3"],
-                  author: {
-                    firstname: "john",
-                    lastname: "doe",
-                    photo: "",
-                  },
-                  comments: [{
-                    content: "this is a comment",
-                    author: {
-                      firstname: "john",
-                      lastname: "doe",
-                      photo: "",
-                    },
-                    responses: [{
-                      content: "this is a response to a comment",
-                    author: {
-                      firstname: "john",
-                      lastname: "doe",
-                      photo: "",
-                    },
-                    }]
-                  }]
-                }]} postIndex={0}/>
+                
               </Box>
               <Box
                 width="260px"

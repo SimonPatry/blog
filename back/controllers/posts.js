@@ -1,16 +1,24 @@
-import mongoose from "mongoose";
+import Mongoose from "mongoose";
 import PostModel from '../Models/post.model.js';
 
 export const getPosts = async (req, res) => {
-    const posts = await PostModel.find({});
+    const posts = await PostModel.find();
 
     res.json(posts);
 };
 
 export const getPost = async (req, res) => {
     const { id } = req.params;
-    const post = await PostModel.findById(id);
-    
+    const post = await PostModel.aggregate([{$match: {_id: Mongoose.Types.ObjectId(id)}},{
+        $lookup:
+          {
+            from: "comment",
+            localField: "_id",
+            foreignField: "comments",
+            as: "comments"
+        }}]);
+    // post.populate("comments");
+    console.log(post);
     res.json(post);
 };
 

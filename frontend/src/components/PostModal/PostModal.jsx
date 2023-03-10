@@ -1,17 +1,14 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import CommentIcon from '@mui/icons-material/Comment';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -20,16 +17,12 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import CardMedia from '@mui/material/CardMedia';
 import LinkIcon from '@mui/icons-material/Link';
 import SendIcon from '@mui/icons-material/Send';
-import { fetchPatch, fetchPost } from '../fetch';
+import { fetchPatch } from '../fetch';
 import AppContext from '../../context/AppContext';
-import Collapse from '@mui/material/Collapse';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import { red } from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
 import('./postmodal.css');
-
 
 const PostDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -69,15 +62,27 @@ PostTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const PostModal = ({ posts, postIndex }) => {
+const PostModal = ({ id, posts, postIndex }) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [index, setIndex] = useState(postIndex);
   const [newResponse, setNewResponse] = useState(null);
   const [newComment, setNewComment] = useState(null);
-
+  const [post, setPost] = useState(null);
+  const [index, setIndex] = useState(postIndex);
   const {sessionToken, user} = useContext(AppContext);
   const { REACT_APP_NEWPOST } = process.env;
   // Quand le token est présent, on récupère l'utilisateur
+
+  useEffect(() => {
+    setPost(posts[postIndex])
+    fetch(`http://localhost:8000/posts/${id}`)
+    .then(res => {
+      console.log(res);
+    })
+  }, [])
+
+  useEffect(() => {
+      setPost(posts[index]);
+  }, [index]);
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -108,14 +113,15 @@ const PostModal = ({ posts, postIndex }) => {
           ...newComment,
           author: user._id,
         })
+        posts[index].comments.push(newComment);
       }
       if (newResponse) {
         setNewResponse({
           ...newResponse,
           author: user._id,
         })
+        posts[index].comments.map()
       }
-      posts[index].comments.push(newComment);
       await fetchPatch(REACT_APP_NEWPOST, posts[index])
       .then(() => {
         setNewComment(null)
@@ -123,7 +129,8 @@ const PostModal = ({ posts, postIndex }) => {
       })
     } catch(e) {
       console.error(e);
-      setNewComment(null)
+      setNewComment(null);
+      setNewResponse(null);
     }
   }
   const [count, setCount] = useState(0);
@@ -133,20 +140,15 @@ const PostModal = ({ posts, postIndex }) => {
 
   return (
     <>
-      <Card onClick={handleClickOpen} sx={{ maxWidth: 345 }}>
+      {post && <Card onClick={handleClickOpen} sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
               R
             </Avatar>
           }
-          action={
-            <Button aria-label="settings">
-              <MoreVertIcon />
-            </Button>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={post.title}
+          subheader={post.date}
         />
         <CardMedia
           component="img"
@@ -178,7 +180,7 @@ const PostModal = ({ posts, postIndex }) => {
             </Button>
           </div>
         </CardActions>
-      </Card>
+      </Card>}
 
       <PostDialog
         onClose={handleClose}
@@ -221,8 +223,8 @@ const PostModal = ({ posts, postIndex }) => {
               </Button>
             </div>
             <div>
-              { posts &&
-                posts[index].comments.map((comment, index) => {       
+              { post &&
+                post.comments.map((comment, index) => {       
                   return(<Card key={index} sx={{padding: "10px", backgroundColor: "#0e1217", color: "white"}}>
                       <Card sx={{padding: "5px"}} >
                         <CardHeader
