@@ -16,6 +16,8 @@ import {
     updatePost,
     addPost
 } from "../controllers/posts.js";
+import { addComment, updateComment } from "../controllers/comments.js";
+
 
 const router = express.Router();
 

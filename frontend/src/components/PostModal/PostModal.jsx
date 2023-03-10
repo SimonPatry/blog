@@ -22,6 +22,11 @@ import LinkIcon from '@mui/icons-material/Link';
 import SendIcon from '@mui/icons-material/Send';
 import { fetchPatch, fetchPost } from '../fetch';
 import AppContext from '../../context/AppContext';
+import Collapse from '@mui/material/Collapse';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import { red } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import('./postmodal.css');
 
@@ -77,7 +82,7 @@ const PostModal = ({ posts, postIndex }) => {
   const handleClickOpen = () => {
     setOpenDialog(true);
   };
-  
+
   const handleClose = () => {
     setOpenDialog(false);
   };
@@ -121,12 +126,60 @@ const PostModal = ({ posts, postIndex }) => {
       setNewComment(null)
     }
   }
+  const [count, setCount] = useState(0);
+  const increase = () => {
+    setCount(count + 1);
+  };
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open dialog
-      </Button>
+      <Card onClick={handleClickOpen} sx={{ maxWidth: 345 }}>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              R
+            </Avatar>
+          }
+          action={
+            <Button aria-label="settings">
+              <MoreVertIcon />
+            </Button>
+          }
+          title="Shrimp and Chorizo Paella"
+          subheader="September 14, 2016"
+        />
+        <CardMedia
+          component="img"
+          height="194"
+          image="/static/images/cards/paella.jpg"
+          alt="Paella dish"
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            Card content
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <div sx={{
+            border: "1px solid #a8b3cf",
+            padding: 0,
+            display: "flex",
+            justifyContent: "space-evenly",
+            borderRadius: "15px",
+          }}>
+            <Button onClick={increase} className="bottom-button">
+              <KeyboardDoubleArrowUpIcon />
+            </Button>
+            <Button className="bottom-button">
+              <CommentIcon />
+            </Button>
+            <Button className="bottom-button">
+              <ReplyIcon sx={{ transform: "scale(-1, 1)" }} />
+            </Button>
+          </div>
+        </CardActions>
+      </Card>
+
       <PostDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -157,94 +210,17 @@ const PostModal = ({ posts, postIndex }) => {
                 </Button>
               </Card>
               <Button className='previous' onClick={() => {
-                setIndex(index > 0 ? index-- : posts.length-1)
+                setIndex(index > 0 ? index-- : posts.length - 1)
               }}>
                 <ChevronLeftIcon />
               </Button>
               <Button className='next' onClick={() => {
-                setIndex(index < posts.length-1 ? index++ : 0)
+                setIndex(index < posts.length - 1 ? index++ : 0)
               }}>
                 <ChevronRightIcon />
               </Button>
             </div>
-            <div className='dialog-content'>
-              <PostTitle id="customized-dialog-title" onClose={handleClose}>
-                { posts[index].title }
-              </PostTitle>
-              <DialogContent dividers>
-                <Typography display="inline" gutterBottom color="#ce3df3">
-                  TLDR
-                </Typography>
-                <Typography display="inline" gutterBottom color="#a8b3cf">
-                  {posts[index].content}
-                </Typography >
-                <Typography>
-                {
-                  posts[index].tags.map((tag, index) => {
-                    return (
-                      <Button key={index}
-                        sx={{backgroundColor: "#1c1f26", color: "white"}}
-                        onClick={() => {
-                        console.log(tag);
-                      }}>
-                        {`#${tag}`}
-                      </Button>
-                    )
-                  })
-                }
-                </Typography>
-                <CardMedia 
-                  sx={{height: 140, border: "1px solid grey"}}
-                  src="\images\default-image.png"
-                  alt={`image alt text`}
-                >
-                </CardMedia>
-              </DialogContent>
-              <DialogActions 
-                  sx={{ 
-                    border: "1px solid #a8b3cf",
-                    padding: 0,
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    borderRadius: "15px",
-                  }}
-              >
-                  <Button className='action-button' autoFocus onClick={handleClose}>
-                    <KeyboardDoubleArrowUpIcon /> Upvote
-                  </Button>
-                  <Button className='action-button' autoFocus onClick={handleClose}>
-                    <CommentIcon /> Comment
-                  </Button>
-                  <Button className='action-button' autoFocus onClick={handleClose}>
-                    <BookmarkIcon /> Bookmark
-                  </Button>
-                  <Button className='action-button' autoFocus onClick={handleClose}>
-                    <ReplyIcon sx={{transform: "scale(-1, 1)"}} /> Share
-                  </Button>
-                </DialogActions>
-            </div>
             <div>
-              <Card  sx={{
-                  backgroundColor: "#0e1217",
-                  borderRadius: "15px",
-                  padding: "5px 10px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  margin: "10px 0px",
-                  color: "white",
-                  border: "1px solid #a8b3cf",
-                }}>
-                  <Typography display='inline'>
-                    Share your thoughts
-                  </Typography>
-                  <Typography display='inline'>
-                    <Button onClick={() => {
-                      console.log(posts[index].comments)
-                    }}>
-                      Post
-                    </Button>
-                  </Typography>
-              </Card>
               { posts &&
                 posts[index].comments.map((comment, index) => {       
                   return(<Card key={index} sx={{padding: "10px", backgroundColor: "#0e1217", color: "white"}}>
@@ -281,33 +257,34 @@ const PostModal = ({ posts, postIndex }) => {
                               }}
                             ></Button>
                         </>)
-                      })}
-                    </Card>)
+                    })}
+                  </Card>)
                 })
               }
             </div>
-          { sessionToken &&
-            <Card>
-            <TextField
-              sx={{width: "100%"}}
-              placeholder="Add a new comment"
-              id="content"
-              onChange={(e) => {
-                handleNewCommentChange(e);
-              }}
-            ></TextField>
-            <Button
-              onClick={() => {
-                updatePost();
-              }}
-            >
-              <SendIcon />
-            </Button>
-          </Card>}
-          </div>
+            { sessionToken &&
+              <Card>
+                <TextField
+                  sx={{width: "100%"}}
+                  placeholder="Add a new comment"
+                  id="content"
+                  onChange={(e) => {
+                    handleNewCommentChange(e);
+                  }}
+                ></TextField>
+                <Button
+                  onClick={() => {
+                    updatePost();
+                  }}
+                >
+                  <SendIcon />
+                </Button>
+              </Card>
+            }
+            </div>
           <div className='dialog-right-sidebar'>
-            <Card sx={{padding: "10px", backgroundColor: "#0e1217"}}>
-              <IconButton sx={{color: "white"}}
+            <Card sx={{ padding: "10px", backgroundColor: "#0e1217" }}>
+              <IconButton sx={{ color: "white" }}
                 onClick={() => {
                   console.log("link")
                 }}
@@ -321,12 +298,12 @@ const PostModal = ({ posts, postIndex }) => {
               backgroundColor: "#1c1f26",
               marginRight: "15px"
             }}>
-              <Typography sx={{borderBottom: "1px solid grey", textAlign: "left"}}>
+              <Typography sx={{ borderBottom: "1px solid grey", textAlign: "left" }}>
                 <SubjectIcon />
                 Table content
               </Typography>
             </Card>
-          </div>
+            </div>
         </div>
       </PostDialog>
     </>
