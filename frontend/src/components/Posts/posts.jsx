@@ -1,13 +1,9 @@
 import './posts.scss';
-import {useContext, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import AppContext from "../../context/AppContext";
-import {Button, TextField, MenuItem} from "@mui/material";
+import {useEffect, useState} from "react";
+import {Button, TextField} from "@mui/material";
 import {fetchPost} from "../fetch";
 
 const Posts = () => {
-  // Hook de navigation
-  const navigate = useNavigate();
 
   // On récupère les variables d'environnement
   const { REACT_APP_POST } = process.env;
