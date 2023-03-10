@@ -9,15 +9,11 @@ const Post = mongoose.Schema({
     author : {
         type : mongoose.Schema.Types.ObjectId,
         ref: 'user',
-        id : mongoose.Schema.Types.ObjectId,
+        
      },
-     responses:[{
-        content: {type: String},
-        author: {
-            ref: 'user',
-            id : mongoose.Schema.Types.ObjectId,
-        },
-        date: {type: Date}
+     comments:[{
+        type : mongoose.Schema.Types.ObjectId,
+        ref: 'comment',
      }]
 }, {timestamps: true});
 

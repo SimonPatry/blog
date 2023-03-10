@@ -39,6 +39,7 @@ export const hashPass = async (req, res, next) => {
 
 // JWT verification and authorization
 export function authVerif(req, res, next){
+    console.log("test")
     console.log(req.session)
     if (!req.session.token) {
         return res.status(401).json({

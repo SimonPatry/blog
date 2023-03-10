@@ -61,6 +61,8 @@ export const fetchDelete = async(url, id) => {
 export const fetchPatch = async(url, id, body) => {
     const patchRequest = {
         method: 'PATCH',
+        credentials: "include",
+        mode: "cors",
         headers: {
             'Content-Type': 'application/json',
             'Allow-Control-Allow-Origin': REACT_APP_API

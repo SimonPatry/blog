@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -19,6 +19,9 @@ import { Avatar, Card, CardHeader, TextField } from '@mui/material';
 import SubjectIcon from '@mui/icons-material/Subject';
 import CardMedia from '@mui/material/CardMedia';
 import LinkIcon from '@mui/icons-material/Link';
+import SendIcon from '@mui/icons-material/Send';
+import { fetchPatch, fetchPost } from '../fetch';
+import AppContext from '../../context/AppContext';
 
 import('./postmodal.css');
 
@@ -66,7 +69,11 @@ const PostModal = ({ posts, postIndex }) => {
   const [index, setIndex] = useState(postIndex);
   const [newResponse, setNewResponse] = useState(null);
   const [newComment, setNewComment] = useState(null);
-  
+
+  const {sessionToken, user} = useContext(AppContext);
+  const { REACT_APP_NEWPOST } = process.env;
+  // Quand le token est présent, on récupère l'utilisateur
+
   const handleClickOpen = () => {
     setOpenDialog(true);
   };
@@ -87,6 +94,32 @@ const PostModal = ({ posts, postIndex }) => {
       ...newComment,
       [e.target.id]: e.target.value
     })
+  }
+
+  const updatePost = async (id) => {
+    try{
+      if (newComment) {
+        setNewComment({
+          ...newComment,
+          author: user._id,
+        })
+      }
+      if (newResponse) {
+        setNewResponse({
+          ...newResponse,
+          author: user._id,
+        })
+      }
+      posts[index].comments.push(newComment);
+      await fetchPatch(REACT_APP_NEWPOST, posts[index])
+      .then(() => {
+        setNewComment(null)
+        setNewResponse(null)
+      })
+    } catch(e) {
+      console.error(e);
+      setNewComment(null)
+    }
   }
 
   return (
@@ -212,7 +245,7 @@ const PostModal = ({ posts, postIndex }) => {
                     </Button>
                   </Typography>
               </Card>
-              { 
+              { posts &&
                 posts[index].comments.map((comment, index) => {       
                   return(<Card key={index} sx={{padding: "10px", backgroundColor: "#0e1217", color: "white"}}>
                       <Card sx={{padding: "5px"}} >
@@ -242,13 +275,19 @@ const PostModal = ({ posts, postIndex }) => {
                                 handleResponseChange(e);
                               }}
                             ></TextField>
+                            <Button
+                              onClick={() => {
+                                updatePost(posts[index]._id);
+                              }}
+                            ></Button>
                         </>)
                       })}
                     </Card>)
                 })
               }
             </div>
-          <Card>
+          { sessionToken &&
+            <Card>
             <TextField
               sx={{width: "100%"}}
               placeholder="Add a new comment"
@@ -257,7 +296,14 @@ const PostModal = ({ posts, postIndex }) => {
                 handleNewCommentChange(e);
               }}
             ></TextField>
-          </Card>
+            <Button
+              onClick={() => {
+                updatePost();
+              }}
+            >
+              <SendIcon />
+            </Button>
+          </Card>}
           </div>
           <div className='dialog-right-sidebar'>
             <Card sx={{padding: "10px", backgroundColor: "#0e1217"}}>

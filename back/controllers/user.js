@@ -42,13 +42,7 @@ export const updateUser = async (req, res) => {
         email,
         firstname,
         lastname,
-        gender,
-        phone,
-        birthdate,
-        city,
-        country,
         photo,
-        category,
         isAdmin
     } = req.body;
 
@@ -60,13 +54,7 @@ export const updateUser = async (req, res) => {
             email,
             firstname,
             lastname,
-            gender,
-            phone,
-            birthdate,
-            city,
-            country,
             photo,
-            category,
             isAdmin
         })
         res.status(200).json({

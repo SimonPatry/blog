@@ -53,7 +53,6 @@ const App = () => {
   useEffect(() => {
     sessionToken &&
       fetchUser().then(fetchedUser => {
-        console.log(fetchedUser)
         setUser(fetchedUser);
       })
   }, [sessionToken])
@@ -109,27 +108,25 @@ const App = () => {
               }}
             >
               <Box
-                width="240px"
+                width="260px"
                 sx={{
                   display: "flex",
                   flexWrap: "wrap",
                   backgroundColor: "#0e1217",
-                  paddingLeft: "20px",
+                  
                 }}
               >
-                <Box sx={{height: "50px"}}>
+                <Box sx={{height: "50px", padding: "20px 20px"}}>
                 {
                   !user ? (
                     <>
                       <Button href="/login">Log in</Button>
+                      <StyledLink href="/sign_in"> SignIn </StyledLink>
                     </>
                   )
                   :
                   (
                     <>
-                      { sessionToken && user && user.isAdmin &&
-                      <StyledLink href="/sign_in"> + Ajouter </StyledLink>
-                      }
                       <StyledLink href={`/edit_user`}>
                         <Avatar
                           alt={`${user.firstname} ${user.lastname}`}
@@ -148,9 +145,16 @@ const App = () => {
                   )
                 }
                 </Box>
-                <Divider sx={{color:"white"}} />
-                <StyledLink href="/">Home</StyledLink>
-                <StyledLink href="/collaborators">Collaborators</StyledLink>
+                <Box sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection:"column",
+                  marginTop: "30px",
+                  borderTop: "1px solid white",
+                  padding:"20px",
+                }}>
+                  <StyledLink href="/">Home</StyledLink>
+                </Box>
                 <PostModal posts={[{
                   title: "test",
                   content: "content test",

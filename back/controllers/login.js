@@ -12,7 +12,6 @@ export async function Login (req, res){
   const { email, password } = req.body;
 
   try {
-
     const user = await UserModel.find({email});
     const match = await bcrypt.compare(password, user[0].password)
 

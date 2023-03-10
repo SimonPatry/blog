@@ -14,6 +14,36 @@ export const getPost = async (req, res) => {
     res.json(post);
 };
 
+export const addPost = async (req, res) => {
+    const { FRONTEND_URL } = process.env; 
+    const {
+        title,
+        content,
+        author,
+        tags
+    } = req.body;
+    console.log(req.body)
+    try {
+          const post = await UserModel.create({
+            title,
+            content,
+            tags, 
+            date: new Date(),
+            responses: [],
+            author
+          });
+          console.log(`Your post has been added!\n`);
+          res.status(200).json({
+            "status": true,
+            "object": post,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': FRONTEND_URL,
+          });
+    } catch (error) {
+        console.log(`Error: ${error.message}`);
+    }
+};
+
 export const deletePost = async (req, res) => {
     
     const { id } = req.params;
@@ -39,6 +69,7 @@ export const updatePost = async (req, res) => {
         content,
         date,
         tags,
+        comments
     } = req.body;
 
     try {
@@ -47,9 +78,10 @@ export const updatePost = async (req, res) => {
         }, 
         {
             title,
-        content,
-        date,
-        tags,
+            content,
+            date,
+            tags,
+            comments
         })
         res.status(200).json({
             "status": true,

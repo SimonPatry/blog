@@ -4,17 +4,11 @@ import { userExists } from "../middlewares/authentification.js";
 export const SignIn = async (req, res) => {
   const { FRONTEND_URL } = process.env; 
   const {
-    gender,
+    email,
     firstname, 
     lastname, 
     password,
-    email,
-    phone,
-    birthdate,
-    city,
-    country,
-    photo,
-    category
+    photo
   } = req.body;
   console.log(req.body)
   try {
@@ -29,18 +23,12 @@ export const SignIn = async (req, res) => {
       }
       else {
         await UserModel.create({
-          gender,
-          category,
+          email,
           firstname, 
           lastname, 
-          email,
           password,
-          phone,
-          birthdate,
-          city,
-          country,
           photo,
-          
+          isAdmin: false
         });
         console.log(`User ${firstname} ${lastname} has been added!\n`);
         res.status(200).json({
