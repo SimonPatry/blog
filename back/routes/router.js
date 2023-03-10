@@ -25,20 +25,23 @@ router.get("/users/:id", getUser);
 router.get("/users", getUsers);
 router.get("/user", authVerif, getSessionUser);
 
-router.get("/post", authVerif, getPost);
+router.get("/posts/:id", authVerif, getPost);
 router.get("/posts", authVerif, getPosts);
 
 // POSTS
 router.post("/login", Login);
 router.post("/post", addPost);
+router.post("/comment", addComment);
 router.post("/sign_in", hashPass, SignIn);
 
 // PATCH
 router.patch("/users/:id", authVerif, updateUser)
 router.patch("/posts/:id", authVerif, isUserAuthor, updatePost)
+router.patch("/comments/:id", authVerif, updateComment)
 
 // DELETE
 router.delete("/users/:id", authVerif, isAdmin, deleteUser)
+router.delete("/posts/:id", authVerif, isUserAuthor, deletePost)
 
 
 export default router;
